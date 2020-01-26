@@ -5,11 +5,13 @@ require 'faker'
 require 'json'
 
 def lorem(event:, context:)
-  paragraph = Faker::Lorem.paragraph
+  method = event['method']
+  args = event['args'].map {|key, value| [key.to_sym, value] }.to_h
+  values = Faker::Lorem.send(method, **args)
 
   {
     lorem: {
-      paragraph: paragraph
+      method => values
     }
   }.to_json
 end

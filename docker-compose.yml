@@ -1,0 +1,22 @@
+version: '3'
+services:
+  base: &base
+    image: lambci/lambda:build-ruby2.5
+    volumes:
+      - .:/var/task
+      - ./layers:/opt
+  console:
+    <<: *base
+    command: bash
+  bundle-install:
+    <<: *base
+    environment:
+      BUNDLE_PATH: ./vendor/bundle
+    working_dir: /var/task
+    command: bundle install
+  layer-bundle-install:
+    <<: *base
+    environment:
+      BUNDLE_PATH: .
+    working_dir: /opt
+    command: bundle install
